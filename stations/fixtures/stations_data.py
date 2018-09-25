@@ -1,4 +1,4 @@
-[
+stations = [
   {
     "name": "MeteoTB1",
     "location": "AOS TB"
