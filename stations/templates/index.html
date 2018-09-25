@@ -1,0 +1,54 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="{% static 'stations/style.css' %}">
+</head>
+<body>
+  <div class="header">
+    <h2> ALMA Weather Stations - Visual Inspection </h2>
+    </br>
+    <a href="http://weather.aiv.alma.cl/index.php" target="_blank">
+     ALMA Weather Stations website
+    </a>
+  </div>
+  <div class="content">
+    <div class="form-container">
+      <div class="form-legend">
+        Select which weather station VIR alarm to acknowledge
+      </div>
+      <form>
+        <div class="form-login">
+          Login&nbsp;:&nbsp; <input class="form-login-input" type="text" name="login"/>
+        </div>
+        <div class="form-stations">
+              <ul class="form-stations-list">
+                {% for station in stations %}
+                  <li>
+                    <div class="station">
+                      <input class="station-checkbox" type="checkbox" name="vir" value="{{ station }}"/>
+                       {{ station }}
+                    </div>
+                  </li>
+                {% endfor %}
+              </ul>
+        </div>
+        <div class="form-submit">
+          <input class="form-submit-btn" type="submit" value="Submit"/>
+        </div>
+        <div class="form-response">
+          <div class="box--success">
+            Succesfull registry for the VIR
+          </div>
+          <div class="box--error">
+            Problem detected for the VIR
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="footer">
+  </div>
+</body>
+</html>
