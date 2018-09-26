@@ -125,6 +125,8 @@ class InspectionTestCase(TestCase):
         for inspection in Inspection.objects.all():
             expected_data.append(inspection.to_dict())
 
-        inspections = Inspection.objects.read_inspections(filename=self.test_filename)
+        inspections = Inspection.objects.read_inspections(
+            filename=self.test_filename
+        )
         for inspection in inspections:
             self.assertTrue(inspection in expected_data)
