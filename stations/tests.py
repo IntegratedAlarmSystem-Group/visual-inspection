@@ -45,13 +45,19 @@ class StationsTestCase(TestCase):
         self.assertTrue(isinstance(stations, list))
         self.assertEqual(len(stations), expected_count)
 
-    def test_station_objects_reference(self):
+    def test_station_objects_references(self):
 
         station_1 = Station('Station 1', 'Location 1')
         station_2 = Station('Station 2', 'Location 2')
 
         self.assertEqual(
-            id(station_1.objects), id(station_2.objects)
+            id(station_1.objects),
+            id(station_2.objects)
+        )
+
+        self.assertEqual(
+            id(station_1.objects.data),
+            id(station_2.objects.data)
         )
 
 
