@@ -116,6 +116,14 @@ input.form-submit-btn {
   border-radius: 2px;
 }
 
+.form-response > .box--info {
+  display: inline-block;
+  color: #17bcff;
+  border: 1px solid #17bcff;
+  padding: 10px;
+  border-radius: 2px;
+}
+
 .box-result {
   font-size: 1em;
   font-weight: bold;
