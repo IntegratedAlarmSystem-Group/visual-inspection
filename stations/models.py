@@ -20,6 +20,12 @@ class StationsManager():
         self.data = {}
         return self.all()
 
+    def get_by_name(self, name):
+        if name in self.data.keys():
+            return self.data[name]
+        else:
+            return None
+
 
 class Station():
     """ Weather station in the observatory """
