@@ -1,5 +1,7 @@
 from datetime import datetime
+from visual_inspection.settings import VI_FILENAME
 import json
+import os
 
 
 class StationsManager():
@@ -45,7 +47,6 @@ class InspectionsManager():
     """ Manager for the Inspections. It saves the registries in a json file """
 
     inspections = {}
-    output_filename = 'inspections.json'
 
     def add(self, obj):
         """ It add or update an inspection with the specified station
@@ -61,17 +62,22 @@ class InspectionsManager():
         """ Delete all the inspections """
         self.inspections = {}
 
-    def dump_inspections(self):
+    def dump_inspections(self, filename=None):
         """ It dumps the data in the dictionary in the json file """
+        if not filename:
+            filename = VI_FILENAME
         data = [item.to_dict() for item in self.all()]
-        with open(self.output_filename, 'w') as outfile:
+        with open(filename, 'w') as outfile:
             json.dump(data, outfile)
 
-    def read_inspections(self):
+    def read_inspections(self, filename=None):
         """ It returns the data in the json file as a list of dictionaries """
+        if not filename:
+            filename = VI_FILENAME
         data = []
-        with open(self.output_filename, 'r') as outfile:
-            data = json.load(outfile)
+        if os.path.isfile(filename):
+            with open(filename, 'r') as infile:
+                data = json.load(infile)
         return data
 
     def load_inspections(self, inspections):
@@ -91,19 +97,32 @@ class Inspection():
         if created_at:
             self.created_at = created_at
         else:
-            self.created_at = datetime.utcnow() if timestamp else datetime.min
+            datetime_min = datetime(1900, 1, 1)
+            self.created_at = datetime.utcnow() if timestamp else datetime_min
 
-    def save(self):
+    def save(self, filename=None):
         try:
             inspection = self.objects.add(self)
-            self.objects.dump_inspections()
+            if filename:
+                self.objects.dump_inspections(filename=filename)
+            else:
+                self.objects.dump_inspections()
         except json.JSONDecodeError:
             inspection = None
         return inspection
 
     def to_dict(self):
         """Return a representation as a dictionary of the Inspection object"""
-        formatted_timestamp = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.')
-        formatted_timestamp += str(int(self.created_at.microsecond/1000))
+        formatted_timestamp = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.%f')
         return {"station": self.station.name,
                 "timestamp": formatted_timestamp}
+
+    @classmethod
+    def to_obj(self, obj_dict):
+        """Return an Inspection object from a dictionary representation"""
+        station = Station.objects.get_by_name(obj_dict["station"])
+        created_at = datetime.strptime(obj_dict["timestamp"],
+                                       '%Y-%m-%dT%H:%M:%S.%f')
+        # username = obj_dict["username"]
+        # return Inspection(station, username, created_at=created_at)
+        return Inspection(station, created_at=created_at)

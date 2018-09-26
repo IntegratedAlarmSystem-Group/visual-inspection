@@ -2,6 +2,7 @@ from django.test import TestCase
 from freezegun import freeze_time
 from datetime import datetime
 from stations.models import Station, Inspection
+import os
 
 
 class StationsTestCase(TestCase):
@@ -61,8 +62,13 @@ class StationsTestCase(TestCase):
 class InspectionTestCase(TestCase):
 
     def setUp(self):
+        self.test_filename = "test_inspections.json"
         Inspection.objects.delete_all()
         self.station = Station("dummyStation", "Location dummy").save()
+
+    def tearDown(self):
+        if os.path.isfile(self.test_filename):
+            os.remove(self.test_filename)
 
     def test_inspection_to_dict(self):
         # Arrange
@@ -73,24 +79,30 @@ class InspectionTestCase(TestCase):
 
         # Assert
         expected_data = {"station": "dummyStation",
-                         "timestamp": '1-01-01T00:00:00.0'}
+                         "timestamp": '1900-01-01T00:00:00.000000'}
         self.assertEqual(inspection_dict, expected_data)
 
     def test_add_inspection_with_old_timestamp(self):
+        # Arrange
+        datetime_min = datetime(1900, 1, 1)
+
         # Act
-        Inspection(self.station, timestamp=False).save()
+        Inspection(self.station, timestamp=False).save(
+            filename=self.test_filename
+        )
 
         # Assert
         inspections = Inspection.objects.all()
         self.assertEqual(len(inspections), 1)
         self.assertEqual(inspections[0].station, self.station)
-        self.assertEqual(inspections[0].created_at, datetime.min)
+
+        self.assertEqual(inspections[0].created_at, datetime_min)
 
     def test_add_inspection_with_current_timestamp(self):
         # Act
         timestamp = datetime(2018, 9, 25)
         with freeze_time(timestamp):
-            Inspection(self.station).save()
+            Inspection(self.station).save(filename=self.test_filename)
 
         # Assert
         inspections = Inspection.objects.all()
@@ -102,17 +114,17 @@ class InspectionTestCase(TestCase):
         # Arrange
         stations = [Station("S{}".format(i), "Loc").save() for i in range(5)]
         for station in stations:
-            Inspection(station).save()
+            Inspection(station).save(filename=self.test_filename)
         self.assertEqual(len(Inspection.objects.all()), 5)
 
         # Act
-        Inspection.objects.dump_inspections()
+        Inspection.objects.dump_inspections(filename=self.test_filename)
 
         # Assert
         expected_data = []
         for inspection in Inspection.objects.all():
             expected_data.append(inspection.to_dict())
 
-        inspections = Inspection.objects.read_inspections()
+        inspections = Inspection.objects.read_inspections(filename=self.test_filename)
         for inspection in inspections:
             self.assertTrue(inspection in expected_data)

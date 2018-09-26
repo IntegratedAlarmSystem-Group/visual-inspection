@@ -10,6 +10,15 @@ class StationsConfig(AppConfig):
 
         """ Initilize the list of Stations and Inspections """
 
+        data = Inspection.objects.read_inspections()
+
         for station in stations_data.stations:
             station = Station(station["name"], station["location"]).save()
-            inspection = Inspection(station, timestamp=False).save()
+
+            if not data:
+                Inspection(station, timestamp=False).save()
+
+        if data:
+            Inspection.objects.delete_all()
+            for item in data:
+                Inspection.to_obj(item).save()
