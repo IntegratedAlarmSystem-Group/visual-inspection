@@ -74,16 +74,24 @@ class InspectionsManager():
             data = json.load(outfile)
         return data
 
+    def load_inspections(self, inspections):
+        self.delete_all()
+        for inspection in inspections:
+            self.add(inspection)
+
 
 class Inspection():
     """ Visual inspection that confirm weather conditions in a Station """
 
     objects = InspectionsManager()
 
-    def __init__(self, station, timestamp=True):
+    def __init__(self, station, created_at=None, timestamp=True):
         """Constructor. It creates a registry for a specific Station"""
         self.station = station
-        self.created_at = datetime.utcnow() if timestamp else datetime.min
+        if created_at:
+            self.created_at = created_at
+        else:
+            self.created_at = datetime.utcnow() if timestamp else datetime.min
 
     def save(self):
         try:
@@ -94,7 +102,7 @@ class Inspection():
         return inspection
 
     def to_dict(self):
-        """Return a representation as a dictionary of the Inspection Object"""
+        """Return a representation as a dictionary of the Inspection object"""
         formatted_timestamp = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.')
         formatted_timestamp += str(int(self.created_at.microsecond/1000))
         return {"station": self.station.name,
