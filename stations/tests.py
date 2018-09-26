@@ -54,6 +54,7 @@ class StationsTestCase(TestCase):
             id(station_1.objects), id(station_2.objects)
         )
 
+
 class InspectionTestCase(TestCase):
 
     def setUp(self):
@@ -80,7 +81,7 @@ class InspectionTestCase(TestCase):
         inspections = Inspection.objects.all()
         self.assertEqual(len(inspections), 1)
         self.assertEqual(inspections[0].station, self.station)
-        self.assertEqual(inspections[0].timestamp, datetime.min)
+        self.assertEqual(inspections[0].created_at, datetime.min)
 
     def test_add_inspection_with_current_timestamp(self):
         # Act
@@ -92,14 +93,14 @@ class InspectionTestCase(TestCase):
         inspections = Inspection.objects.all()
         self.assertEqual(len(inspections), 1)
         self.assertEqual(inspections[0].station, self.station)
-        self.assertEqual(inspections[0].timestamp, timestamp)
+        self.assertEqual(inspections[0].created_at, timestamp)
 
     def test_dump_inspections_in_file(self):
         # Arrange
         stations = [Station("S{}".format(i), "Loc").save() for i in range(5)]
         for station in stations:
             Inspection(station).save()
-        self.assertEqual(len(Inspection.objects.all(), 5))
+        self.assertEqual(len(Inspection.objects.all()), 5)
 
         # Act
         Inspection.objects.dump_inspections()
@@ -109,7 +110,7 @@ class InspectionTestCase(TestCase):
         for inspection in Inspection.objects.all():
             expected_data.append(inspection.to_dict())
 
-        inspections = self.inspections_manager.load_inspections()
+        inspections = Inspection.objects.read_inspections()
         for inspection in inspections:
             self.assertTrue(inspection in expected_data)
 

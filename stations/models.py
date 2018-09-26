@@ -44,12 +44,12 @@ class InspectionsManager():
     def add(self, obj):
         """ It add or update an inspection with the specified station
         in the dictionary """
-        self.inspections[obj.name] = obj
+        self.inspections[obj.station.name] = obj
         return obj
 
     def all(self):
         """ Returns the dictionary of inspections """
-        return self.inspections.values()
+        return list(self.inspections.values())
 
     def delete_all(self):
         """ Delete all the inspections """
@@ -57,11 +57,11 @@ class InspectionsManager():
 
     def dump_inspections(self):
         """ It dumps the data in the dictionary in the json file """
-        data = [item.to_dict() for item in self.inspections.values()]
+        data = [item.to_dict() for item in self.all()]
         with open(self.output_filename, 'w') as outfile:
             json.dump(data, outfile)
 
-    def load_inspections(self):
+    def read_inspections(self):
         """ It returns the data in the json file as a list of dictionaries """
         data = []
         with open(self.output_filename, 'r') as outfile:
@@ -87,7 +87,7 @@ class Inspection():
     def save(self):
         try:
             inspection = self.objects.add(self)
-            self.objects.dump_inspections(self)
+            self.objects.dump_inspections()
         except json.JSONDecodeError:
             inspection = None
         return inspection
