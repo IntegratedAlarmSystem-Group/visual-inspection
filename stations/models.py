@@ -68,11 +68,6 @@ class InspectionsManager():
             data = json.load(outfile)
         return data
 
-    # def validate_station(self, obj):
-    #     """ Return True if the station is valid and False if it is not """
-    #     stations_names = [station["name"] for station in stations]
-    #     return True if obj.name in stations_names else False
-
 
 class Inspection():
     """ Visual inspection that confirm weather conditions in a Station """

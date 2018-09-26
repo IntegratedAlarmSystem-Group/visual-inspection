@@ -8,13 +8,8 @@ class StationsConfig(AppConfig):
 
     def ready(self):
 
-        """ Constructor. It creates the list of Stations """
+        """ Initilize the list of Stations and Inspections """
 
         for station in stations_data.stations:
-            Station.objects.add(
-                Station(station["name"], station["location"]))
-
-        # for station in stations_data.stations:
-        #     station_name = station["name"]
-        #     inspection = Inspection(station_name, timestamp=False)
-        #     self.inspections[station_name] = inspection
+            station = Station(station["name"], station["location"]).save()
+            inspection = Inspection(station, timestamp=False).save()
