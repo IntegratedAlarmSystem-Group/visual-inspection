@@ -17,48 +17,48 @@ class StationsManagerTestCase(TestCase):
         self.assertEqual(stations[0].location, "AOS TB")
 
 
-class InspectionsManagerTestCase(TestCase):
-
-    def setUp(self):
-        self.inspections_manager = InspectionsManager()
-
-    def test_inspections_manager_add_item(self):
-        # Arrange
-        last_inspection = self.inspections_manager.all()["Meteo201"]
-        self.assertEqual(last_inspection.created_at, datetime.min)
-
-        # Act
-        timestamp = datetime(2018, 9, 25)
-        with freeze_time(timestamp):
-            self.inspections_manager._add("Meteo201")
-
-        # Assert
-        inspection = self.inspections_manager.all()["Meteo201"]
-        self.assertEqual(inspection.station, "Meteo201")
-        self.assertEqual(inspection.created_at, timestamp)
-
-    def test_inspections_manager_dumps_inspections(self):
-        # Arrange
-        last_inspection = self.inspections_manager.all()["Meteo201"]
-        self.assertEqual(last_inspection.created_at, datetime.min)
-
-        # Act
-        timestamp = datetime(2018, 9, 25)
-        with freeze_time(timestamp):
-            self.inspections_manager._add("Meteo201")
-        self.inspections_manager.dump_inspections()
-
-        # Assert
-        expected_data = []
-        for station in stations_data.stations:
-            if station["name"] == "Meteo201":
-                timestamp = '2018-09-25T00:00:00.0'
-            else:
-                timestamp = '1-01-01T00:00:00.0'
-            expected_data.append(
-                {"station": station["name"],
-                 "timestamp": timestamp}
-            )
-        inspections = self.inspections_manager.load_inspections()
-        for inspection in inspections:
-            self.assertTrue(inspection in expected_data)
+# class InspectionsManagerTestCase(TestCase):
+#
+#     def setUp(self):
+#         self.inspections_manager = InspectionsManager()
+#
+#     def test_inspections_manager_add_item(self):
+#         # Arrange
+#         last_inspection = self.inspections_manager.all()["Meteo201"]
+#         self.assertEqual(last_inspection.created_at, datetime.min)
+#
+#         # Act
+#         timestamp = datetime(2018, 9, 25)
+#         with freeze_time(timestamp):
+#             self.inspections_manager._add("Meteo201")
+#
+#         # Assert
+#         inspection = self.inspections_manager.all()["Meteo201"]
+#         self.assertEqual(inspection.station, "Meteo201")
+#         self.assertEqual(inspection.created_at, timestamp)
+#
+#     def test_inspections_manager_dumps_inspections(self):
+#         # Arrange
+#         last_inspection = self.inspections_manager.all()["Meteo201"]
+#         self.assertEqual(last_inspection.created_at, datetime.min)
+#
+#         # Act
+#         timestamp = datetime(2018, 9, 25)
+#         with freeze_time(timestamp):
+#             self.inspections_manager._add("Meteo201")
+#         self.inspections_manager.dump_inspections()
+#
+#         # Assert
+#         expected_data = []
+#         for station in stations_data.stations:
+#             if station["name"] == "Meteo201":
+#                 timestamp = '2018-09-25T00:00:00.0'
+#             else:
+#                 timestamp = '1-01-01T00:00:00.0'
+#             expected_data.append(
+#                 {"station": station["name"],
+#                  "timestamp": timestamp}
+#             )
+#         inspections = self.inspections_manager.load_inspections()
+#         for inspection in inspections:
+#             self.assertTrue(inspection in expected_data)

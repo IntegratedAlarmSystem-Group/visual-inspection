@@ -3,58 +3,32 @@ from stations.fixtures import stations_data
 import json
 
 
-class Station():
-    """ Weather station in the observatory """
-
-    def __init__(self, name, location):
-        self.name = name
-        self.location = location
-
-
 class StationsManager():
     """ Manager for the weather stations """
 
     data = []
 
-    def __init__(self):
-        """ Constructor. It creates the list of Stations """
-        for station in stations_data.stations:
-            self.data.append(Station(station["name"], station["location"]))
+    def add(self, obj):
+        self.data.append(obj)
 
     def all(self):
         """ Return a list of Stations objects """
         return self.data
 
+class Station():
+    """ Weather station in the observatory """
 
-class Inspection():
-    """ Visual inspection that confirm weather conditions in a Station """
+    objects = StationsManager()
 
-    def __init__(self, station, timestamp=True):
-        """Constructor. It creates a registry for a specific Station"""
-        self.station = station
-        self.created_at = datetime.utcnow() if timestamp else datetime.min
-
-    def to_dict(self):
-        """Return a representation as a dictionary of the Inspection Object"""
-        formatted_timestamp = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.')
-        formatted_timestamp += str(int(self.created_at.microsecond/1000))
-        return {"station": self.station,
-                "timestamp": formatted_timestamp}
-
+    def __init__(self, name, location):
+        self.name = name
+        self.location = location
 
 class InspectionsManager():
     """ Manager for the Inspections. It saves the registries in a json file """
 
     inspections = {}
     output_filename = 'inspections.json'
-
-    def __init__(self, output_path=""):
-        """ The optional output_path specify the folder where the json files
-        with the registries will be located """
-        for station in stations_data.stations:
-            station_name = station["name"]
-            inspection = Inspection(station_name, timestamp=False)
-            self.inspections[station_name] = inspection
 
     def all(self):
         """ Returns the dictionary of inspections """
@@ -101,3 +75,20 @@ class InspectionsManager():
             return self.inspections[station_name]
         else:
             return None
+
+class Inspection():
+    """ Visual inspection that confirm weather conditions in a Station """
+
+    objects = InspectionsManager()
+
+    def __init__(self, station, timestamp=True):
+        """Constructor. It creates a registry for a specific Station"""
+        self.station = station
+        self.created_at = datetime.utcnow() if timestamp else datetime.min
+
+    def to_dict(self):
+        """Return a representation as a dictionary of the Inspection Object"""
+        formatted_timestamp = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.')
+        formatted_timestamp += str(int(self.created_at.microsecond/1000))
+        return {"station": self.station,
+                "timestamp": formatted_timestamp}

@@ -1,6 +1,8 @@
 from django.http import HttpResponse
 from django.template import loader
 
+from stations.models import Station
+
 STATIONS = [
     'MeteoTB1',
     'MeteoTB2',
@@ -16,10 +18,10 @@ STATIONS = [
 
 def index(request):
 
-    stations_list = STATIONS
+    stations = Station.objects.all()
     template = loader.get_template('./index.html')
     context = {
-        'stations': stations_list
+        'stations': stations
     }
 
     return HttpResponse(template.render(context, request))
