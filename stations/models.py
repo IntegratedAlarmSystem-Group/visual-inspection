@@ -6,14 +6,20 @@ import json
 class StationsManager():
     """ Manager for the weather stations """
 
-    data = []
+    data = {}
 
     def add(self, obj):
-        self.data.append(obj)
+        key = obj.name  # station name
+        self.data[key] = obj
+        return self.data[key]
 
     def all(self):
         """ Return a list of Stations objects """
-        return self.data
+        return list(self.data.values())
+
+    def delete_all(self):
+        self.data = {}
+        return self.all()
 
 class Station():
     """ Weather station in the observatory """
@@ -23,6 +29,10 @@ class Station():
     def __init__(self, name, location):
         self.name = name
         self.location = location
+
+    def save(self):
+        res = self.objects.add(self)
+        return res
 
 class InspectionsManager():
     """ Manager for the Inspections. It saves the registries in a json file """
