@@ -45,6 +45,13 @@ ul.form-stations-list {
   padding: 24px 20px;
 }
 
+.login-field-error-message {
+  display: inline;
+  color: #ed6258;
+  font-size: 0.8em;
+  padding-left: 4px;
+}
+
 .station {
   display: block;
   padding: 2px 0;

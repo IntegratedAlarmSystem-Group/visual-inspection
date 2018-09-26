@@ -22,6 +22,9 @@
         {% csrf_token %}
         <div class="form-login">
           Login&nbsp;:&nbsp; <input class="form-login-input" type="text" name="login"/>
+          <div class="login-field-error-message">
+            {{ form_login_message }}
+          </div>
         </div>
         <div class="form-stations">
               <ul class="form-stations-list">
