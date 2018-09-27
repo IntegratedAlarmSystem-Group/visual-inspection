@@ -68,7 +68,7 @@ class InspectionsManager():
             filename = VI_FILENAME
         data = [item.to_dict() for item in self.all()]
         with open(filename, 'w') as outfile:
-            json.dump(data, outfile)
+            json.dump(data, outfile, indent=4)
 
     def read_inspections(self, filename=None):
         """ It returns the data in the json file as a list of dictionaries """
@@ -91,9 +91,10 @@ class Inspection():
 
     objects = InspectionsManager()
 
-    def __init__(self, station, created_at=None, timestamp=True):
+    def __init__(self, station, username, created_at=None, timestamp=True):
         """Constructor. It creates a registry for a specific Station"""
         self.station = station
+        self.username = username
         if created_at:
             self.created_at = created_at
         else:
@@ -115,6 +116,7 @@ class Inspection():
         """Return a representation as a dictionary of the Inspection object"""
         formatted_timestamp = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.%f')
         return {"station": self.station.name,
+                "username": self.username,
                 "timestamp": formatted_timestamp}
 
     @classmethod
@@ -123,6 +125,5 @@ class Inspection():
         station = Station.objects.get_by_name(obj_dict["station"])
         created_at = datetime.strptime(obj_dict["timestamp"],
                                        '%Y-%m-%dT%H:%M:%S.%f')
-        # username = obj_dict["username"]
-        # return Inspection(station, username, created_at=created_at)
-        return Inspection(station, created_at=created_at)
+        username = obj_dict["username"]
+        return Inspection(station, username, created_at=created_at)

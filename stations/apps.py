@@ -16,7 +16,8 @@ class StationsConfig(AppConfig):
             station = Station(station["name"], station["location"]).save()
 
             if not data:
-                Inspection(station, timestamp=False).save()
+                username = "None"
+                Inspection(station, username, timestamp=False).save()
 
         if data:
             Inspection.objects.delete_all()

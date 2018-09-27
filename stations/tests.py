@@ -65,6 +65,7 @@ class InspectionTestCase(TestCase):
         self.test_filename = "test_inspections.json"
         Inspection.objects.delete_all()
         self.station = Station("dummyStation", "Location dummy").save()
+        self.username = "usertest"
 
     def tearDown(self):
         if os.path.isfile(self.test_filename):
@@ -72,14 +73,15 @@ class InspectionTestCase(TestCase):
 
     def test_inspection_to_dict(self):
         # Arrange
-        inspection = Inspection(self.station, timestamp=False)
+        inspection = Inspection(self.station, self.username, timestamp=False)
 
         # Act
         inspection_dict = inspection.to_dict()
 
         # Assert
         expected_data = {"station": "dummyStation",
-                         "timestamp": '1900-01-01T00:00:00.000000'}
+                         "timestamp": '1900-01-01T00:00:00.000000',
+                         "username": "usertest"}
         self.assertEqual(inspection_dict, expected_data)
 
     def test_add_inspection_with_old_timestamp(self):
@@ -87,7 +89,7 @@ class InspectionTestCase(TestCase):
         datetime_min = datetime(1900, 1, 1)
 
         # Act
-        Inspection(self.station, timestamp=False).save(
+        Inspection(self.station, self.username, timestamp=False).save(
             filename=self.test_filename
         )
 
@@ -102,7 +104,7 @@ class InspectionTestCase(TestCase):
         # Act
         timestamp = datetime(2018, 9, 25)
         with freeze_time(timestamp):
-            Inspection(self.station).save(filename=self.test_filename)
+            Inspection(self.station, self.username).save(filename=self.test_filename)
 
         # Assert
         inspections = Inspection.objects.all()
@@ -114,7 +116,7 @@ class InspectionTestCase(TestCase):
         # Arrange
         stations = [Station("S{}".format(i), "Loc").save() for i in range(5)]
         for station in stations:
-            Inspection(station).save(filename=self.test_filename)
+            Inspection(station, self.username).save(filename=self.test_filename)
         self.assertEqual(len(Inspection.objects.all()), 5)
 
         # Act
