@@ -105,6 +105,3 @@ venv.bak/
 
 # output file
 inspections.json
-
-# static files
-static/
