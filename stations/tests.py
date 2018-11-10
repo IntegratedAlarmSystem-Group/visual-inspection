@@ -88,7 +88,7 @@ class InspectionTestCase(TestCase):
 
         # Assert
         expected_data = {"station": "dummyStation",
-                         "timestamp": '1900-01-01T00:00:00.000000',
+                         "timestamp": '1900-01-01T00:00:00.000',
                          "username": "usertest"}
         self.assertEqual(inspection_dict, expected_data)
 
