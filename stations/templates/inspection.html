@@ -26,8 +26,8 @@
             {{ form_login_message }}
           </div>
         </div>
-        <div class="form-stations">
-          <ul class="form-stations-list">
+        <!-- <div class="form-stations"> -->
+          <!-- <ul class="form-stations-list">
             {% for station in stations %}
               <li>
                 <div class="station">
@@ -36,8 +36,26 @@
                 </div>
               </li>
             {% endfor %}
-          </ul>
-        </div>
+          </ul> -->
+          <table class="table-stations">
+              <tr>
+                  <th>Selection</th>
+                  <th>Area</th>
+                  <th>Description</th>
+                  <th>Primary WS</th>
+                  <th>Secondary WS</th>
+              </tr>
+              {% for station in stations %}
+                <tr>
+                    <td> <input class="station-checkbox" type="checkbox" name="vir" value="{{ station.name }}"/> </td>
+                    <td> {{ station.name }} </td>
+                    <td> {{ station.location }} </td>
+                    <td> {{ station.primary }} </td>
+                    <td> {{ station.secondary }} </td>
+                </tr>
+              {% endfor %}
+          </table>
+        <!-- </div> -->
         <div class="form-submit">
           <input class="form-submit-btn" type="submit" value="Submit"/>
         </div>

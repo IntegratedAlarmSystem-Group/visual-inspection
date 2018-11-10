@@ -1,46 +1,26 @@
 stations = [
   {
-    "name": "MeteoTB1",
-    "location": "AOS TB"
+    "name": "Inner",
+    "location": "Area corresponding to the Inner Array and ACA.",
+    "primary": "MeteoCentral",
+    "secondary": "Meteo 129, Meteo 130, Meteo 131"
   },
   {
-    "name": "MeteoTB2",
-    "location": "AOS TB"
+    "name": "W",
+    "location": "Area corresponding to the West Arm.",
+    "primary": "Meteo201",
+    "secondary": "Meteo130"
   },
   {
-    "name": "MeteoOSF",
-    "location": "OSF HG Tower#2"
+    "name": "P",
+    "location": "Area corresponding to Pampa La Bola.",
+    "primary": "Meteo410",
+    "secondary": "Meteo129"
   },
   {
-    "name": "MeteoItinerant",
-    "location": "AOS Itinerant Wind Meter"
-  },
-  {
-    "name": "Meteo201",
-    "location": "Near pad W201"
-  },
-  {
-    "name": "MeteoCentral",
-    "location": "Central Weather Station"
-  },
-  {
-    "name": "Meteo309",
-    "location": "Near pad S309"
-  },
-  {
-    "name": "Meteo410",
-    "location": "Near pad P410"
-  },
-  {
-    "name": "Meteo131",
-    "location": "Near pad A131"
-  },
-  {
-    "name": "Meteo129",
-    "location": "Near pad A129",
-  },
-  {
-    "name": "Meteo130",
-    "location": "Near pad A130",
+    "name": "S",
+    "location": "Area corresponding to the South Arm.",
+    "primary": "Meteo309",
+    "secondary": "Meteo131"
   }
 ]
