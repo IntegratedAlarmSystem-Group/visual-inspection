@@ -13,7 +13,12 @@ class StationsConfig(AppConfig):
         data = Inspection.objects.read_inspections()
 
         for station in stations_data.stations:
-            station = Station(station["name"], station["location"]).save()
+            station = Station(
+                station["name"],
+                station["location"],
+                station["primary"],
+                station["secondary"]
+            ).save()
 
             if not data:
                 username = "None"

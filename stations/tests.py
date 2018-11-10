@@ -12,15 +12,21 @@ class StationsTestCase(TestCase):
 
     def test_station_save(self):
 
-        res = Station('Station Test', 'Dummy Location').save()
+        res = Station(
+            'Station Test',
+            'Dummy Location',
+            'Primary',
+            'Secondary').save()
 
         self.assertEqual(res.name, 'Station Test')
         self.assertEqual(res.location, 'Dummy Location')
+        self.assertEqual(res.primary, 'Primary')
+        self.assertEqual(res.secondary, 'Secondary')
 
     def test_station_should_not_be_stored_if_repeated(self):
 
         for i in range(2):
-            Station('Station Test', 'Dummy Location').save()
+            Station('Station Test', 'Dummy Location','P','S').save()
 
         stations = Station.objects.all()
 
@@ -33,7 +39,9 @@ class StationsTestCase(TestCase):
         for i in range(expected_count):
             Station(
                 'Station {}'.format(i),
-                'Location {}'.format(i)
+                'Location {}'.format(i),
+                'P',
+                'S'
             ).save()
 
         # act
@@ -45,8 +53,8 @@ class StationsTestCase(TestCase):
 
     def test_station_objects_references(self):
 
-        station_1 = Station('Station 1', 'Location 1')
-        station_2 = Station('Station 2', 'Location 2')
+        station_1 = Station('Station 1', 'Location 1', 'P', 'S')
+        station_2 = Station('Station 2', 'Location 2', 'P', 'S')
 
         self.assertEqual(
             id(station_1.objects),
@@ -64,7 +72,7 @@ class InspectionTestCase(TestCase):
     def setUp(self):
         self.test_filename = "test_inspections.json"
         Inspection.objects.delete_all()
-        self.station = Station("dummyStation", "Location dummy").save()
+        self.station = Station("dummyStation", "Location", 'P', 'S').save()
         self.username = "usertest"
 
     def tearDown(self):
@@ -114,9 +122,13 @@ class InspectionTestCase(TestCase):
 
     def test_dump_inspections_in_file(self):
         # Arrange
-        stations = [Station("S{}".format(i), "Loc").save() for i in range(5)]
+        stations = [
+            Station("S{}".format(i), "Loc", 'P', 'S').save() for i in range(5)
+        ]
         for station in stations:
-            Inspection(station, self.username).save(filename=self.test_filename)
+            Inspection(station, self.username).save(
+                filename=self.test_filename
+            )
         self.assertEqual(len(Inspection.objects.all()), 5)
 
         # Act

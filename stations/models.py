@@ -34,9 +34,11 @@ class Station():
 
     objects = StationsManager()
 
-    def __init__(self, name, location):
+    def __init__(self, name, location, primary, secondary):
         self.name = name
         self.location = location
+        self.primary = primary
+        self.secondary = secondary
 
     def save(self):
         res = self.objects.add(self)
