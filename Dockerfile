@@ -23,4 +23,4 @@ RUN find . | grep -E "(__pycache__|\.pyc|\.pyo$)" | xargs rm -rf
 
 # Expose static files and port
 VOLUME /usr/src/visual-inspection/static
-EXPOSE 8001
+EXPOSE 8000

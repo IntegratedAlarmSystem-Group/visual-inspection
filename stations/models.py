@@ -34,9 +34,11 @@ class Station():
 
     objects = StationsManager()
 
-    def __init__(self, name, location):
+    def __init__(self, name, location, primary, secondary):
         self.name = name
         self.location = location
+        self.primary = primary
+        self.secondary = secondary
 
     def save(self):
         res = self.objects.add(self)
@@ -115,6 +117,7 @@ class Inspection():
     def to_dict(self):
         """Return a representation as a dictionary of the Inspection object"""
         formatted_timestamp = self.created_at.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        formatted_timestamp = formatted_timestamp[:-3]
         return {"station": self.station.name,
                 "username": self.username,
                 "timestamp": formatted_timestamp}

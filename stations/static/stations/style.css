@@ -73,9 +73,23 @@ input.form-login-input {
   padding: 4px;
 }
 
-.form-stations {
-  padding: 8px 0px 8px 28px;
-  text-align: center;
+.table-stations {
+  width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+  border: 3px solid #2e445c;
+  border-collapse: collapse;
+  margin-top:30px;
+}
+
+th {
+    padding: 20px;
+    border: 2px solid #2e445c;
+}
+
+td {
+    padding: 20px;
+    border: 2px solid #2e445c;
 }
 
 .form-submit {
